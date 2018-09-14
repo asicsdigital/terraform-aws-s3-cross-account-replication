@@ -3,17 +3,19 @@
 data "aws_iam_policy_document" "dest_bucket_policy" {
   statement {
     sid = "1"
+
     actions = [
       "s3:ReplicateObject",
       "s3:ReplicateDelete",
     ]
 
     resources = [
-      "${local.dest_bucket_object_arn}"
+      "${local.dest_bucket_object_arn}",
     ]
 
     principals {
       type = "AWS"
+
       identifiers = [
         "${local.source_root_user_arn}",
       ]

@@ -1,4 +1,3 @@
-
 locals {
   "source_bucket_arn"        = "arn:aws:s3:::${var.source_bucket_name}"
   "dest_bucket_arn"          = "arn:aws:s3:::${var.dest_bucket_name}"
