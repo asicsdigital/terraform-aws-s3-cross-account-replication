@@ -1,12 +1,3 @@
-variable "source_aws_profile" {
-  type        = "string"
-  description = "AWS profile to use when managing resources in the source account"
-}
-
-variable "dest_aws_profile" {
-  type        = "string"
-  description = "AWS profile to use when managing resources in the destination account"
-}
 
 variable "source_region" {
   type        = "string"
