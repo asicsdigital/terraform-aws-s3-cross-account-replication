@@ -2,7 +2,7 @@
 
 # S3 source IAM
 
-data "aws_iam_policy_document" "replication_role" {
+data "aws_iam_policy_document" "source_replication_role" {
   statement {
     actions = ["sts:AssumeRole"]
 
@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "replication_role" {
   }
 }
 
-data "aws_iam_policy_document" "replication_policy" {
+data "aws_iam_policy_document" "source_replication_policy" {
   statement {
     actions = [
       "s3:GetReplicationConfiguration",
@@ -48,22 +48,22 @@ data "aws_iam_policy_document" "replication_policy" {
   }
 }
 
-resource "aws_iam_role" "replication" {
+resource "aws_iam_role" "source_replication" {
   provider           = "aws.source"
-  name               = "${local.replication_name}-role"
-  assume_role_policy = "${data.aws_iam_policy_document.replication_role.json}"
+  name               = "${local.replication_name}-replication-role"
+  assume_role_policy = "${data.aws_iam_policy_document.source_replication_role.json}"
 }
 
-resource "aws_iam_policy" "replication" {
+resource "aws_iam_policy" "source_replication" {
   provider = "aws.source"
-  name     = "${local.replication_name}-policy"
-  policy   = "${data.aws_iam_policy_document.replication_policy.json}"
+  name     = "${local.replication_name}-replication-policy"
+  policy   = "${data.aws_iam_policy_document.source_replication_policy.json}"
 }
 
-resource "aws_iam_role_policy_attachment" "replication" {
+resource "aws_iam_role_policy_attachment" "source_replication" {
   provider   = "aws.source"
-  role       = "${aws_iam_role.replication.name}"
-  policy_arn = "${aws_iam_policy.replication.arn}"
+  role       = "${aws_iam_role.source_replication.name}"
+  policy_arn = "${aws_iam_policy.source_replication.arn}"
 }
 
 # S3 source bucket
@@ -78,7 +78,7 @@ resource "aws_s3_bucket" "source" {
   }
 
   replication_configuration {
-    role = "${aws_iam_role.replication.arn}"
+    role = "${aws_iam_role.source_replication.arn}"
 
     rules {
       id     = "${local.replication_name}"
