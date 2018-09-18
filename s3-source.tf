@@ -40,6 +40,7 @@ data "aws_iam_policy_document" "source_replication_policy" {
     actions = [
       "s3:ReplicateObject",
       "s3:ReplicateDelete",
+      "s3:ObjectOwnerOverrideToBucketOwner",
     ]
 
     resources = [

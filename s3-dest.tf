@@ -7,10 +7,32 @@ data "aws_iam_policy_document" "dest_bucket_policy" {
     actions = [
       "s3:ReplicateObject",
       "s3:ReplicateDelete",
+      "s3:ObjectOwnerOverrideToBucketOwner",
     ]
 
     resources = [
       "${local.dest_bucket_object_arn}",
+    ]
+
+    principals {
+      type = "AWS"
+
+      identifiers = [
+        "${local.source_root_user_arn}",
+      ]
+    }
+  }
+
+  statement {
+    sid = "2"
+
+    actions = [
+      "s3:GetBucketVersioning",
+      "s3:PutBucketVersioning",
+    ]
+
+    resources = [
+      "${local.dest_bucket_arn}",
     ]
 
     principals {
