@@ -84,7 +84,7 @@ resource "aws_s3_bucket" "source" {
     rules {
       id     = "${local.replication_name}"
       status = "Enabled"
-      prefix = ""
+      prefix = "${var.replicate_prefix}"
 
       destination {
         bucket        = "${local.dest_bucket_arn}"

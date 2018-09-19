@@ -21,6 +21,7 @@ Note due to a feature currently missing in the Terraform AWS provider there is a
 #### Optional
 
 - `create_dest_bucket` - Boolean for whether this module should create the destination bucket
+- `replicate_prefix`   - Prefix to replicate, default `""` for all objects. Note if specifying, must end in a `/`
 
 Usage
 -----
@@ -69,7 +70,7 @@ As a workaround, after running a `terraform apply`, go to the S3 console for the
 1. Navigate to the source S3 bucket
 1. Click on `Management`
 1. Click on `Replication`
-1. Select the `Entire bucket` row in the bottom section
+1. Select the row in the bottom section
 1. Click `Edit`
 1. Click `Next`
 1. Check the checkbox for `Change object ownership to destination bucket owner`
