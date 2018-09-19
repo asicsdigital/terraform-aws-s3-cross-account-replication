@@ -1,11 +1,11 @@
 # MAIN
 
 provider "aws" {
-  alias   = "source"
+  alias = "source"
 }
 
 provider "aws" {
-  alias   = "dest"
+  alias = "dest"
 }
 
 data "aws_caller_identity" "source" {

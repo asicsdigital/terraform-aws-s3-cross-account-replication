@@ -1,4 +1,3 @@
-
 variable "source_region" {
   type        = "string"
   description = "AWS region for the source bucket"
