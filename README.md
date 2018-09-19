@@ -84,7 +84,7 @@ As a workaround, after running a `terraform apply`, go to the S3 console for the
 
 - Set `create_dest_bucket` to false
 - Run terraform apply
-- Copy the Statement in the output `dest_bucket_policy_json` into the bucket policy for the destination bucket
+- Copy the output `dest_bucket_policy_json` into the bucket policy for the destination bucket
 - Ensure that versioning is enabled for the destination bucket (Cross-region replication requires versioning be enabled: see Requirements at https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html)
 - Also follow the manual step above to enable setting owner on replicated objects
 
