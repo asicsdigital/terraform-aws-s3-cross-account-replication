@@ -41,5 +41,4 @@ resource "aws_iam_user_policy_attachment" "source_write" {
 resource "aws_iam_access_key" "source_write" {
   provider = "aws.source"
   user     = "${aws_iam_user.source_write.name}"
-  pgp_key  = "keybase:${var.keybase_user_id}"
 }

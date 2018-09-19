@@ -22,8 +22,3 @@ variable "replication_name" {
   type        = "string"
   description = "Short name to describe this replication"
 }
-
-variable "keybase_user_id" {
-  type        = "string"
-  description = "Keybase user ID to encrypt source write IAM user secret access key"
-}
