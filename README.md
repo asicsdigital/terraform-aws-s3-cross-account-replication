@@ -20,6 +20,7 @@ Note due to a feature currently missing in the Terraform AWS provider there is a
 
 #### Optional
 
+- `create_dest_bucket` - Boolean for whether this module should create the destination bucket
 
 Usage
 -----
@@ -79,10 +80,19 @@ As a workaround, after running a `terraform apply`, go to the S3 console for the
 1. Note, there will be a message about changing settings on the destination bucket - that has already been done by Terraform, so no further action is needed
 
 
+#### If not creating the destination bucket with this module:
+
+- Set `create_dest_bucket` to false
+- Run terraform apply
+- Copy the Statement in the output `dest_bucket_policy_json` into the bucket policy for the destination bucket
+- Ensure that versioning is enabled for the destination bucket (Cross-region replication requires versioning be enabled: see Requirements at https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html)
+- Also follow the manual step above to enable setting owner on replicated objects
+
 Outputs
 =======
 
 - `dest_account_id` - The account ID for the destination account. Needed when performing the final required manual step in S3 Console to enable setting owner on replicated objects.
+- `dest_bucket_policy_json` - The S3 bucket policy that must be added on the destination bucket manually if `create_dest_bucket` is false.
 
 Authors
 =======
