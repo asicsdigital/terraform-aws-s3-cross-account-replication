@@ -4,6 +4,12 @@ output "dest_account_id" {
   value = "${data.aws_caller_identity.dest.account_id}"
 }
 
+# Destination bucket policy to add manually
+
+output "dest_bucket_policy_json" {
+  value = "${var.create_dest_bucket == "true" ? "not needed" : data.aws_iam_policy_document.dest_bucket_policy.json}"
+}
+
 # Source write IAM user
 
 output "source_write_iam_user_access_key_id" {
