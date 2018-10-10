@@ -89,6 +89,12 @@ resource "aws_s3_bucket" "source" {
       destination {
         bucket        = "${local.dest_bucket_arn}"
         storage_class = "STANDARD"
+
+        access_control_translation = {
+          owner = "Destination"
+        }
+
+        account_id = "${data.aws_caller_identity.dest.account_id}"
       }
     }
   }
