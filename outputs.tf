@@ -1,9 +1,3 @@
-# Destination Account ID
-
-output "dest_account_id" {
-  value = "${data.aws_caller_identity.dest.account_id}"
-}
-
 # Destination bucket policy to add manually
 
 output "dest_bucket_policy_json" {

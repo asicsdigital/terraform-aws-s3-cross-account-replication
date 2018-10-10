@@ -1,15 +1,13 @@
 # terraform-aws-s3-cross-account-replication
 Terraform Module for managing s3 bucket cross-account cross-region replication.
 
-Note due to a feature currently missing in the Terraform AWS provider there is a manual step required after running Terraform, see below (issue on Terraform AWS provider: https://github.com/terraform-providers/terraform-provider-aws/issues/3575).
-
 ----------------------
 
 #### Required
 
 - `source_bucket_name` - Name for the source bucket (which will be created by this module)
 - `source_region`      - Region for source bucket
-- `dest_bucket_name`   - Name for the destination bucket (which will also be created by this module)
+- `dest_bucket_name`   - Name for the destination bucket (optionally created by this module)
 - `dest_region`        - Region for the destination bucket
 - `replication_name`   - Short name for this replication (used in IAM roles and source bucket configuration)
 
@@ -61,26 +59,6 @@ output "dest_account_id" {
 
 ```
 
-#### Manual step to enable setting owner on replicated objects
-
-Currently there is a feature missing from the Terraform AWS provider that would enable Terraform to configure replication to properly set the owner on replicated objects so that the destination account can access the objects. See https://github.com/terraform-providers/terraform-provider-aws/issues/3575
-
-As a workaround, after running a `terraform apply`, go to the S3 console for the source account and follow these steps:
-
-1. Navigate to the source S3 bucket
-1. Click on `Management`
-1. Click on `Replication`
-1. Select the row in the bottom section
-1. Click `Edit`
-1. Click `Next`
-1. Check the checkbox for `Change object ownership to destination bucket owner`
-1. Enter the `dest_account_id` (provided by the output from the module when running the `terraform apply`) in the box labeled `Type account ID of destination bucket`
-1. Click `Next`
-1. Click `Next`
-1. Click `Save`
-1. Note, there will be a message about changing settings on the destination bucket - that has already been done by Terraform, so no further action is needed
-
-
 #### If not creating the destination bucket with this module:
 
 - Set `create_dest_bucket` to false
@@ -92,7 +70,6 @@ As a workaround, after running a `terraform apply`, go to the S3 console for the
 Outputs
 =======
 
-- `dest_account_id` - The account ID for the destination account. Needed when performing the final required manual step in S3 Console to enable setting owner on replicated objects.
 - `dest_bucket_policy_json` - The S3 bucket policy that must be added on the destination bucket manually if `create_dest_bucket` is false.
 
 Authors
