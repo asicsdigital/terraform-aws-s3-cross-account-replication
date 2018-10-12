@@ -2,7 +2,7 @@
 
 data "aws_iam_policy_document" "dest_bucket_policy" {
   statement {
-    sid = "replicate-objects-from-${data.aws_caller_identity.source.account_id}"
+    sid = "replicate-objects-from-${data.aws_caller_identity.source.account_id}-to-prefix-${var.replicate_prefix}"
 
     actions = [
       "s3:ReplicateObject",
