@@ -24,6 +24,8 @@ Terraform Module for managing s3 bucket cross-account cross-region replication.
 Usage
 -----
 
+If creating the dest bucket:
+
 ```hcl
 
 provider "aws" {
@@ -38,7 +40,7 @@ provider "aws" {
   region  = "us-east-1"
 }
 
-module "s3-cross-account-replication" {
+module "s3_cross_account_replication" {
   source             = "github.com/asicsdigital/terraform-aws-s3-cross-account-replication?ref=v1.0.0"
   source_bucket_name = "source-bucket"
   source_region      = "us-west-1"
@@ -51,11 +53,42 @@ module "s3-cross-account-replication" {
     "aws.dest"   = "aws.dest"
   }
 }
+```
 
-output "dest_account_id" {
-  value = "${module.s3-cross-account-replication.dest_account_id}"
+
+Or if not creating dest bucket,
+
+```hcl
+provider "aws" {
+  alias   = "source"
+  profile = "source-account-aws-profile"
+  region  = "us-west-1"
 }
 
+provider "aws" {
+  alias   = "dest"
+  profile = "dest-account-aws-profile"
+  region  = "us-east-1"
+}
+
+module "s3_cross_account_replication" {
+  source             = "github.com/asicsdigital/terraform-aws-s3-cross-account-replication?ref=v1.0.0"
+  source_bucket_name = "source-bucket"
+  source_region      = "us-west-1"
+  dest_bucket_name   = "dest-bucket"
+  create_dest_bucket = "false"
+  dest_region        = "us-east-1"
+  replication_name   = "my-replication-name"
+
+  providers {
+    "aws.source" = "aws.source"
+    "aws.dest"   = "aws.dest"
+  }
+}
+
+output "dest_bucket_policy_json" {
+  value = "${module.s3_cross_account_replication.dest_bucket_policy_json"
+}
 
 ```
 
