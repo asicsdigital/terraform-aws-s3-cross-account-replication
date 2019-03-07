@@ -87,7 +87,7 @@ module "s3_cross_account_replication" {
 }
 
 output "dest_bucket_policy_json" {
-  value = "${module.s3_cross_account_replication.dest_bucket_policy_json"
+  value = "${module.s3_cross_account_replication.dest_bucket_policy_json}"
 }
 
 ```
