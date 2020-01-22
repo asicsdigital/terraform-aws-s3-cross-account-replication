@@ -20,8 +20,16 @@ data "aws_iam_policy_document" "source_replication_policy" {
       "s3:ListBucket",
     ]
 
+    # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
+    # force an interpolation expression to be interpreted as a list by wrapping it
+    # in an extra set of list brackets. That form was supported for compatibility in
+    # v0.11, but is no longer supported in Terraform v0.12.
+    #
+    # If the expression in the following list itself returns a list, remove the
+    # brackets to avoid interpretation as a list of lists. If the expression
+    # returns a single list item then leave it as-is and remove this TODO comment.
     resources = [
-      "${local.source_bucket_arn}",
+      local.source_bucket_arn,
     ]
   }
 
@@ -31,8 +39,16 @@ data "aws_iam_policy_document" "source_replication_policy" {
       "s3:GetObjectVersionAcl",
     ]
 
+    # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
+    # force an interpolation expression to be interpreted as a list by wrapping it
+    # in an extra set of list brackets. That form was supported for compatibility in
+    # v0.11, but is no longer supported in Terraform v0.12.
+    #
+    # If the expression in the following list itself returns a list, remove the
+    # brackets to avoid interpretation as a list of lists. If the expression
+    # returns a single list item then leave it as-is and remove this TODO comment.
     resources = [
-      "${local.source_bucket_object_arn}",
+      local.source_bucket_object_arn,
     ]
   }
 
@@ -43,59 +59,68 @@ data "aws_iam_policy_document" "source_replication_policy" {
       "s3:ObjectOwnerOverrideToBucketOwner",
     ]
 
+    # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
+    # force an interpolation expression to be interpreted as a list by wrapping it
+    # in an extra set of list brackets. That form was supported for compatibility in
+    # v0.11, but is no longer supported in Terraform v0.12.
+    #
+    # If the expression in the following list itself returns a list, remove the
+    # brackets to avoid interpretation as a list of lists. If the expression
+    # returns a single list item then leave it as-is and remove this TODO comment.
     resources = [
-      "${local.dest_bucket_object_arn}",
+      local.dest_bucket_object_arn,
     ]
   }
 }
 
 resource "aws_iam_role" "source_replication" {
-  provider           = "aws.source"
+  provider           = aws.source
   name               = "${local.replication_name}-replication-role"
-  assume_role_policy = "${data.aws_iam_policy_document.source_replication_role.json}"
+  assume_role_policy = data.aws_iam_policy_document.source_replication_role.json
 }
 
 resource "aws_iam_policy" "source_replication" {
-  provider = "aws.source"
+  provider = aws.source
   name     = "${local.replication_name}-replication-policy"
-  policy   = "${data.aws_iam_policy_document.source_replication_policy.json}"
+  policy   = data.aws_iam_policy_document.source_replication_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "source_replication" {
-  provider   = "aws.source"
-  role       = "${aws_iam_role.source_replication.name}"
-  policy_arn = "${aws_iam_policy.source_replication.arn}"
+  provider   = aws.source
+  role       = aws_iam_role.source_replication.name
+  policy_arn = aws_iam_policy.source_replication.arn
 }
 
 # S3 source bucket
 
 resource "aws_s3_bucket" "source" {
-  provider = "aws.source"
-  bucket   = "${var.source_bucket_name}"
-  region   = "${var.source_region}"
+  provider = aws.source
+  bucket   = var.source_bucket_name
+  region   = var.source_region
 
   versioning {
     enabled = true
   }
 
   replication_configuration {
-    role = "${aws_iam_role.source_replication.arn}"
+    role = aws_iam_role.source_replication.arn
 
     rules {
-      id     = "${local.replication_name}"
+      id     = local.replication_name
       status = "Enabled"
-      prefix = "${var.replicate_prefix}"
+      prefix = var.replicate_prefix
 
       destination {
-        bucket        = "${local.dest_bucket_arn}"
+        bucket        = local.dest_bucket_arn
         storage_class = "STANDARD"
 
-        access_control_translation = {
+        access_control_translation {
           owner = "Destination"
         }
 
-        account_id = "${data.aws_caller_identity.dest.account_id}"
+        account_id = data.aws_caller_identity.dest.account_id
       }
     }
   }
 }
+
