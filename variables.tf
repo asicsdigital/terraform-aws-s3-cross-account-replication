@@ -34,3 +34,8 @@ variable "replication_name" {
   type        = string
   description = "Short name to describe this replication"
 }
+
+variable "priority" {
+  description = "The priority associated with the rule."
+  default = 0
+}

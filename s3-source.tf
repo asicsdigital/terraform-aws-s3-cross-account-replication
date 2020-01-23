@@ -108,6 +108,7 @@ resource "aws_s3_bucket" "source" {
     rules {
       id     = local.replication_name
       status = "Enabled"
+      priority = var.priority
       prefix = var.replicate_prefix
 
       destination {
@@ -123,4 +124,3 @@ resource "aws_s3_bucket" "source" {
     }
   }
 }
-
