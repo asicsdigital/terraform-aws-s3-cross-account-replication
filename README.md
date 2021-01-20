@@ -13,8 +13,8 @@ Terraform Module for managing s3 bucket cross-account cross-region replication.
 
 - Terraform 0.11 module provider inheritance block:
 
-- `aws.source` - AWS provider alias for source account
-- `aws.dest`   - AWS provider alias for destination account
+- `source_of_replication` - AWS provider alias for source account
+- `aws.destination_of_replication`   - AWS provider alias for destination account
 
 #### Optional
 
@@ -47,8 +47,8 @@ module "s3-cross-account-replication" {
   replication_name   = "my-replication-name"
 
   providers {
-    "aws.source" = "aws.source"
-    "aws.dest"   = "aws.dest"
+    "source_of_replication" = "source_of_replication"
+    "aws.destination_of_replication"   = "aws.destination_of_replication"
   }
 }
 

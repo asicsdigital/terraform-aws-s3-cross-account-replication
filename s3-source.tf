@@ -74,19 +74,19 @@ data "aws_iam_policy_document" "source_replication_policy" {
 }
 
 resource "aws_iam_role" "source_replication" {
-  provider           = aws.source
+  provider           = aws.source_of_replication
   name               = "${local.replication_name}-replication-role"
   assume_role_policy = data.aws_iam_policy_document.source_replication_role.json
 }
 
 resource "aws_iam_policy" "source_replication" {
-  provider = aws.source
+  provider = aws.source_of_replication
   name     = "${local.replication_name}-replication-policy"
   policy   = data.aws_iam_policy_document.source_replication_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "source_replication" {
-  provider   = aws.source
+  provider   = aws.source_of_replication
   role       = aws_iam_role.source_replication.name
   policy_arn = aws_iam_policy.source_replication.arn
 }
@@ -94,7 +94,7 @@ resource "aws_iam_role_policy_attachment" "source_replication" {
 # S3 source bucket
 
 resource "aws_s3_bucket" "source" {
-  provider = aws.source
+  provider = aws.source_of_replication
   bucket   = var.source_bucket_name
   region   = var.source_region
 

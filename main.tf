@@ -1,18 +1,18 @@
 # MAIN
 
 provider "aws" {
-  alias = "source"
+  alias = "source_of_replication"
 }
 
 provider "aws" {
-  alias = "dest"
+  alias = "destination_of_replication"
 }
 
 data "aws_caller_identity" "source" {
-  provider = aws.source
+  provider = aws.source_of_replication
 }
 
 data "aws_caller_identity" "dest" {
-  provider = aws.dest
+  provider = aws.destination_of_replication
 }
 
